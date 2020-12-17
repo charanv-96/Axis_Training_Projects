@@ -1,0 +1,70 @@
+package com.manipal.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.manipal.bean.Ticket;
+import com.manipal.proxy.MovieServiceProxy;
+import com.manipal.proxy.UserServiceProxy;
+import com.manipal.service.impl.TicketServiceImpl;
+
+import io.swagger.annotations.ApiOperation;
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+public class TicketController {
+	
+	@Autowired
+	private TicketServiceImpl ticketService;
+	
+
+	@ApiOperation(value = "Retrieve ticket using ticket Id")
+	@GetMapping("ticket-service/ticketId/{ticketId}/ticket")
+	public Ticket getTicketById(@PathVariable("ticketId") int ticketId) {
+
+		return ticketService.getTicketById(ticketId);
+		
+	}
+	
+	@ApiOperation(value = "Book Ticket")
+	@PostMapping("ticket-service/ticket/userName/{userName}/movieName/{movieName}/noOfTickets/{noOfTickets}")
+	public Ticket bookTicket(@PathVariable("movieName") String movieName, @PathVariable("userName") String userName, @PathVariable("noOfTickets") int noOfTickets) {
+
+		return ticketService.bookTicket(userName, movieName.toLowerCase(), noOfTickets);
+		
+	}
+	
+	@ApiOperation(value = "Cancel Ticket")
+	@DeleteMapping("ticket-service/cancel/{ticketId}/ticket")
+	public String cancelTicket(@PathVariable("ticketId") int ticketId) {
+
+		return ticketService.cancelTicket(ticketId);
+		
+	}
+	
+	@ApiOperation(value = "Delete all tickets")
+	@DeleteMapping("ticket-service/ticket")
+	public String deleteTickets() {
+
+		return ticketService.deleteTickets();
+		
+	}
+	
+	@ApiOperation(value = "Retrieve all tickets")
+	@GetMapping("ticket-service/ticket")
+	public List<Ticket> getAllTickets() {
+
+		return ticketService.getAllTickets();
+		
+	}
+	
+	
+
+}

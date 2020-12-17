@@ -1,0 +1,87 @@
+package com.manipal.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.manipal.bean.Movie;
+import com.manipal.service.impl.MovieServiceImpl;
+
+import io.swagger.annotations.ApiOperation;
+
+@RestController
+public class MovieController {
+	
+	@Autowired
+	private MovieServiceImpl movieService;
+	
+	@ApiOperation(value = "Retrieve movie using movie Id")
+	@GetMapping("movie-service/movieId/{movieId}/movie")
+	public Movie getMovieById(@PathVariable("movieId") int movieId) {
+		
+		return movieService.getMovieById(movieId);
+		
+	}
+	
+	@ApiOperation(value = "Retrieve movie using movie name")
+	@GetMapping("movie-service/movieName/{movieName}/movie")
+	public Movie getMovieFromMovieName(@PathVariable("movieName") String movieName) {
+		
+		return movieService.getMovieFromMovieName(movieName.toLowerCase());
+	}
+	
+	@ApiOperation(value = "Add movie to currently screening movies")
+	@PostMapping("movie-service/movie")
+	public Movie setMovie(@RequestBody Movie movie) {
+		
+		return movieService.setMovie(movie);
+		
+	}
+	
+	@ApiOperation(value = "Update number of available tickets of a movie when a ticket is booked")
+	@PutMapping("movie-service/movieId/{movieId}/noOfTickets/{noOfTickets}")
+	public Movie updateNoOfTickets(@PathVariable("movieId") int movieId, @PathVariable("noOfTickets") int noOfTickets) {
+		
+		return movieService.updateNoOfTicketsOfMovie(movieId, noOfTickets);
+		
+	}
+	
+	@ApiOperation(value = "Update number of available tickets of a movie when a ticket is cancelled")
+	@PutMapping("movie-service/movie-service/add/movieId/{movieId}/noOfTickets/{noOfTickets}")
+	public Movie updateNoOfTicketsAdd(@PathVariable("movieId") int movieId, @PathVariable("noOfTickets") int noOfTickets) {
+		
+		return movieService.updateNoOfTicketsOfMovieAdd(movieId, noOfTickets);
+		
+	}
+	
+	
+	@ApiOperation(value = "Remove a movie from currently screening movies")
+	@DeleteMapping("movie-service/movieId/{movieId}/movie")
+	public String removeMovie(@PathVariable("movieId") int movieId) {
+		
+		return movieService.removeMovie(movieId);
+	}
+	
+	@ApiOperation(value = "Show all currently screening movies")
+	@GetMapping("movie-service/movie")
+	public List<Movie> getAllMovies() {
+		
+		return movieService.getAllMovies();
+		
+	}
+	
+	@ApiOperation(value = "Remove all movies")
+	@DeleteMapping("movie-service/movie")
+	public String removeAllMovies() {
+		
+		return movieService.removeAllMovies();
+	}
+
+}

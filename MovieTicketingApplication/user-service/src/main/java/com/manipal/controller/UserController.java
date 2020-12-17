@@ -1,0 +1,96 @@
+package com.manipal.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.manipal.bean.User;
+import com.manipal.service.impl.UserServiceImpl;
+
+import io.swagger.annotations.ApiOperation;
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+public class UserController {
+	
+	@Autowired
+	private UserServiceImpl userService;
+	
+	@ApiOperation(value = "Retrieve user using user id")
+	@GetMapping("user-service/userId/{userId}/user")
+	public User getUserById(@PathVariable("userId") int userId) {
+		
+		return userService.getUserById(userId);
+		
+	}
+	
+	@ApiOperation(value = "Retrieve user using user name")
+	@GetMapping("user-service/userName/{userName}/user")
+	public User getUserFromUserName(@PathVariable("userName") String userName) {
+		
+		return userService.getUserFromUserName(userName);
+		
+	}
+	
+	@ApiOperation(value = "Add new user")
+	@PostMapping("user-service/user")
+	public User setUser(@RequestBody User user) {
+		
+		return userService.setUser(user);
+		
+	}
+	
+	@ApiOperation(value = "remove user using user id")
+	@DeleteMapping("user-service/userId/{userId}/user")
+	public String removeUser(@PathVariable("userId") int userId) {
+		
+		return userService.removeUser(userId);
+	}
+	
+	@ApiOperation(value = "login validation")
+	@GetMapping("user-service/login/{userName}/{userPassword}")
+	public boolean login(@PathVariable("userName") String userName, @PathVariable("userPassword") String userPassword) {
+		
+		return userService.login(userName, userPassword);
+		
+	}
+	
+	@ApiOperation(value = "Retrieve all users")
+	@GetMapping("user-service/user")
+	public List<User> getAllUsers() {
+		
+		return userService.getAllUsers();
+		
+	}
+	
+	@ApiOperation(value = "Remove all users")
+	@DeleteMapping("user-service/user")
+	public String deleteUsers() {
+		
+		return userService.deleteUsers();
+	}
+	
+	@PutMapping("user-service/user/{userId}")
+	public ResponseEntity<User> updateMovie(@PathVariable("movieId") int movieId, @RequestBody User userDetails) {
+		User user = userService.getUserById(movieId);
+		
+		user.setUserName(userDetails.getUserName());
+		user.setUserPassword(userDetails.getUserPassword());
+		user.setUserAge(userDetails.getUserAge());
+		
+		User updatedUser =  userService.setUser(user);
+		
+		return ResponseEntity.ok(updatedUser);
+		
+	}
+
+}
